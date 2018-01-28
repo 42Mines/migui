@@ -1,2 +1,2 @@
-model_checkpoint_path: "smoke"
-all_model_checkpoint_paths: "smoke"
+model_checkpoint_path: "smoke2"
+all_model_checkpoint_paths: "smoke2"
