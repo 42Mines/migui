@@ -15,7 +15,7 @@ TRAIN_UPDATE_FREQ = 5
 TEST_UPDATE_FREQ = 50
 PATH = "C:/Users/Victor/Desktop/Mines_ParisTech/MIG/Codes/TestNN/BDD_FUMEE/"
 
-mnist = mnist_data.read_data_sets(PATH, one_hot=True, reshape=False, mode="fire3")
+mnist = mnist_data.read_data_sets(PATH, one_hot=True, reshape=False, mode="smoke")
 
 X = tf.placeholder(tf.float32, [None, IMAGE_SIZE, IMAGE_SIZE, 3])
 # reponses attendues
@@ -163,4 +163,4 @@ print("--- Training finished ---")
 print("max test accuracy: " + str(datavis.get_max_test_accuracy()))
 print("average test accuracy: " + str(datavis.get_average_test_accuracy()))
 #Sauvegarde du reseau de neurones
-saver.save(sess,'./tmp/fire3')
+saver.save(sess,'./tmp/smoke')

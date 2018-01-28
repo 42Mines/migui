@@ -89,7 +89,7 @@ def compute(img, debug=False):
             units = sess.run(layer,feed_dict={X:[stimuli],pkeep:1.0})
             plotNNFilter(units,stimuli)
         ### CHARGEMENT DU RESEAU DE NEURONES
-        saver.restore(sess, "./tmp/fire3")
+        saver.restore(sess, "./tmp/smoke")
         img = loadWithImg(img)
         res = sess.run(Y, {X:[img], pkeep:1})
         ### MODE DEBUG :###
