@@ -78,6 +78,7 @@ Y = tf.nn.softmax(Ylogits) #sortie du reseau de neurones
 saver = tf.train.Saver()
 
 def compute(img, debug=False):
+    print(tf.get_default_graph())
     with tf.Session() as sess:  
         # Fonction servant à afficher les images d'activation
         def plotNNFilter(units,src):
@@ -130,6 +131,9 @@ def compute(img, debug=False):
             plt.show()
             getActivations(Y2,img)
             plt.show()
-            
-    return res[0,1]
+        print(tf.get_default_graph())
+        sess.close()
+        return res[0,1]
+
+print(compute(cv2.imread("a.jpg")))
 
