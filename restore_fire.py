@@ -23,7 +23,7 @@ def loadWithImg(img):
 def predict(img):
     img = cv2.resize(img, (64,64))
     with tf.Session() as sess:  
-        saver.restore(sess, "./tmp/smoke")
+        saver.restore(sess, "tmp/fire3")
         return sess.run(Y, {X:[img], pkeep:1})[1]
 
 def compatible_convolutional_noise_shape(Y):
@@ -149,7 +149,7 @@ def compute(img, debug=False):
         def getActivations(layer,stimuli):
             units = sess.run(layer,feed_dict={X:[stimuli],pkeep:1.0})
             plotNNFilter(units,stimuli)
-        saver.restore(sess, "/tmp/fire3")
+        saver.restore(sess, "tmp/fire3")
         img = np.multiply(loadWithImg(img),1.0/255.0)
         plt.imshow(img)
         plt.show()
@@ -163,7 +163,7 @@ def compute(img, debug=False):
             people = ('Feu', 'Rien')
             y_pos = np.arange(2)
             performance = res[0][::-1]
-
+            """
             ax2.barh(y_pos, performance, align='center',
                     color='red', ecolor='black')
             ax2.set_yticks(y_pos)
@@ -174,7 +174,7 @@ def compute(img, debug=False):
             ax3.set_title('Image')
             ax3.imshow(img)
             plt.show()
-            """
+            
             plt.imshow(np.reshape(img,[64,64,3]))
             plt.show()
             getActivations(Y1,img)

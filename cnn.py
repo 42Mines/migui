@@ -10,10 +10,10 @@ tf.set_random_seed(0)
 BATCH_SIZE = 200
 TEST_BATCH_SIZE = 1000
 IMAGE_SIZE = 64
-NB_ITERATIONS = 3000
-TRAIN_UPDATE_FREQ = 5
-TEST_UPDATE_FREQ = 50
-PATH = "C:/Users/Victor/Desktop/Mines_ParisTech/MIG/Codes/TestNN/BDD_FUMEE/"
+NB_ITERATIONS = 1000
+TRAIN_UPDATE_FREQ = 10
+TEST_UPDATE_FREQ = 30
+PATH = "C:/Users/Victor/Desktop/Mines_ParisTech/MIG/BDD/BDD_FUMEE/"
 
 mnist = mnist_data.read_data_sets(PATH, one_hot=True, reshape=False, mode="smoke")
 
@@ -32,7 +32,7 @@ pkeep = tf.placeholder(tf.float32) #probabilite de dropout
 PKEEP = 0.95
 
 # learning rates params
-max_learning_rate = 0.001
+max_learning_rate = 0.0006
 min_learning_rate = 0.00001
 decay_speed = 2000
 
@@ -85,7 +85,7 @@ Y = tf.nn.softmax(Ylogits) #sortie du reseau de neurones
 
 cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=Ylogits, labels=Y_)
 cross_entropy = tf.reduce_mean(cross_entropy) * BATCH_SIZE
-
+0
 correct_prediction = tf.equal(tf.argmax(Y, 1), tf.argmax(Y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
@@ -163,4 +163,4 @@ print("--- Training finished ---")
 print("max test accuracy: " + str(datavis.get_max_test_accuracy()))
 print("average test accuracy: " + str(datavis.get_average_test_accuracy()))
 #Sauvegarde du reseau de neurones
-saver.save(sess,'./tmp/smoke')
+saver.save(sess,'./tmp/smoke3')
