@@ -1,11 +1,8 @@
 import restore_smoke
-import restore_fire
 import detec_zones_fumee
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-
-
 
 def first_smoke_pass(img, max_zones_detected = 4):
     """
@@ -29,7 +26,7 @@ def confirm_smoke(img, x1, y1, x2, y2):
        :return: double la probabilite qu'on ait bien du feu
     """
 
-    img = cv2.medianBlur(img,5)[x1:x2,y1:y2]
+    img = cv2.medianBlur(img, 5)[y1:y2, x1:x2]
     probas2 = restore_smoke.compute(img)
     return probas2
 
