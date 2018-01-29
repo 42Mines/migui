@@ -1,4 +1,5 @@
-#import restore_smoke
+import restore_smoke
+import restore_fire
 import detec_zones_fumee
 import cv2
 import numpy as np
@@ -28,7 +29,7 @@ def confirm_smoke(img, x1, y1, x2, y2):
        :return: double la probabilite qu'on ait bien du feu
     """
 
-    img_ = cv2.medianBlur(img,5)[x1:x2,y1:y2]
+    img = cv2.medianBlur(img,5)[x1:x2,y1:y2]
     probas2 = restore_smoke.compute(img)
     return probas2
 
@@ -97,7 +98,4 @@ def proba_fumee(fn):
     ### Affichage du résultat
     return (xMin,yMin,xMax,yMax,max_proba)
 
-#Exemple d'utilisation
-print(proba_fumee("C:/Users/Victor/tensorflow-mnist-tutorial/algo/test/1 (1).jpg"))
-#print(first_smoke_pass("C:/Users/Victor/tensorflow-mnist-tutorial/algo/test/1 (1).jpg"))
 

@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 model_checkpoint_path: "smoke3"
 all_model_checkpoint_paths: "smoke3"
+=======
+model_checkpoint_path: "smoke2"
+all_model_checkpoint_paths: "smoke2"
+>>>>>>> c0300233c0cd0952c7d0d8f8045a007311ec4eb3

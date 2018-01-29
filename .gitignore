@@ -1,3 +1,5 @@
 uploads/*
 *.jpg
 test/*
+*.pyc
+*.pyc

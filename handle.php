@@ -19,9 +19,7 @@ if (in_array($extension_upload, $extensions_autorisees))
 	$name = time();
 	move_uploaded_file($photo['tmp_name'], 'uploads/' . "$name.$extension_upload");
 
-	while(!file_exists(__DIR__. "/uploads/fire_$name.$extension_upload")){
-		usleep(100);
-	}
+	exec("/usr/local/bin/python3 main.py");
 
 	echo $name;
 }

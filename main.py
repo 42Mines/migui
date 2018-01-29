@@ -1,66 +1,40 @@
-import interface
+import interface_feu
+import interface_fumee
 import cv2
 
 from os import listdir
 from os.path import isfile
 
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+folder = "./uploads/"
 
+for file in listdir(folder):
+    if isfile(folder + file) and (file.find("jpg") >= 0 or file.find("jpeg") >= 0) and file.find("fire") == -1 and file.find("smoke") == -1:
+        if isfile(folder + "fire_" + file):
+            continue
 
-def process():
-    folder = "./uploads/"
-    for file in listdir(folder):
-        if isfile(folder + file) and (file.find("jpg") >= 0 or file.find("jpeg") >= 0) and file.find("fire") == -1:
-            print(folder + file)
-            (x1, y1, x2, y2), _ = interface.first_fire_pass(cv2.imread(folder + file))
+        # feu
+        (x1, y1, x2, y2), proba = interface_feu.first_fire_pass(cv2.imread(folder + file))
 
-            img = cv2.imread(folder + file)
+        img = cv2.imread(folder + file)
+
+        if proba > 0.1:
             cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 3)
-            cv2.imwrite(folder + "fire_" + file, img)
 
-            metadata = open(folder + "metadata_" + file.replace(".jpeg", "").replace(".jpg", "") + ".txt", "w")
-            metadata.write(str(interface.confirm_fire(img, x1, y1, x2, y2)))
+        cv2.imwrite(folder + "fire_" + file, img)
 
+        metadata = open(folder + "metadata_fire_" + file.replace(".jpeg", "").replace(".jpg", "") + ".txt", "w")
+        metadata.write(str(interface_feu.confirm_fire(img, x1, y1, x2, y2)))
+        metadata.close()
 
-class EventHandler(FileSystemEventHandler):
-    """Logs all the events captured."""
+        # fumée
+        zones_fumee_potentielle = interface_fumee.first_smoke_pass(folder + file)
+        img = cv2.imread(folder + file)
+        metadata = open(folder + "metadata_smoke_" + file.replace(".jpeg", "").replace(".jpg", "") + ".txt", "w")
 
-    def on_created(self, event):
-        super(EventHandler, self).on_created(event)
+        for i in range(len(zones_fumee_potentielle)):
+            y1, x1, y2, x2 = zones_fumee_potentielle[i]
+            cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 3)
+            metadata.write(str(interface_fumee.confirm_smoke(cv2.imread(folder + file), x1, y1, x2, y2)) + "\n")
 
-        try:
-            path = event.src_path
-            if (path.find("jpg") >= 0 or path.find("jpeg") >= 0) and path.find("fire") == -1:
-                folder = "./uploads/"
-                for file in listdir(folder):
-                    if isfile(folder + file) and (file.find("jpg") >= 0 or file.find("jpeg") >= 0) and file.find(
-                            "fire") == -1:
-                        print(folder + file)
-                        (x1, y1, x2, y2), _ = interface.first_fire_pass(cv2.imread(folder + file))
-
-                        img = cv2.imread(folder + file)
-                        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 3)
-                        cv2.imwrite(folder + "fire_" + file, img)
-
-                        metadata = open(folder + "metadata_" + file.replace(".jpeg", "").replace(".jpg", "") + ".txt","w")
-                        print(interface.confirm_fire(img, x1, y1, x2, y2))
-                        metadata.write(str(interface.confirm_fire(img, x1, y1, x2, y2)))
-                        metadata.write("coucou")
-        except Exception as a:
-            print(a)
-
-
-event_handler = EventHandler()
-observer = Observer()
-observer.schedule(event_handler, "./uploads")
-observer.start()
-
-import time
-
-try:
-    while True:
-        time.sleep(1)
-except KeyboardInterrupt:
-    observer.stop()
-observer.join()
+        cv2.imwrite(folder + "smoke_" + file, img)
+        metadata.close()
