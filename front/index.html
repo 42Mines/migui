@@ -23,6 +23,10 @@
 			width: 100%;
 		}
 
+		.top {
+			margin-top: 50px;
+		}
+
 	</style>
 <body ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event);">
 
@@ -38,7 +42,7 @@
 	<p class="lead">Démonstration du logiciel de reconnaissance de feux</p>
 </div>
 
-<div class="container" id="drop_zone">
+<div class="container-fluid" id="drop_zone">
 	<div class="card-deck mb-3 text-center">
 		<div class="card mb-4 box-shadow">
 			<div class="card-body">
@@ -48,7 +52,20 @@
 	</div>
 </div>
 
-<div class="container" id="show_zone">
+<div class="container-fluid" id="load_zone">
+	<div class="card-deck mb-3 text-center">
+		<div class="card mb-4 box-shadow">
+			<div class="card-body">
+				<div class="top container">
+					<h1>Chargement en cours...</h1>
+					<div style="height: 20px;" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid" id="show_zone">
 	<div class="card-deck mb-3 text-center">
 		<div class="card mb-4 box-shadow">
 			<div class="card-header">
@@ -67,6 +84,15 @@
 				<img id="fire_img" src="">
 			</div>
 		</div>
+
+		<div class="card mb-4 box-shadow">
+			<div class="card-header">
+				<h4 class="my-0 font-weight-normal">Détection de fumée</h4>
+			</div>
+			<div class="card-body">
+				<img id="smoke_img" src="">
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -78,6 +104,7 @@
 
 <script type="text/javascript">
 	$("#show_zone").hide()
+	$("#load_zone").hide()
 
 	function drop_handler(ev) {
 		ev.preventDefault();
@@ -95,16 +122,20 @@
 
 						var formData = new FormData();
 						formData.append('photo', f, 'photo.jpg');
+						$("#drop_zone").hide();
+						$("#show_zone").hide();
+						$("#load_zone").show();
 						$.ajax("handle.php", {
 							type: "POST",
 							data: formData,
 							success: function (data) {
 								console.log(data);
-								$("#drop_zone").hide();
+								$("#load_zone").hide();
 								$("#show_zone").show();
 
 								$("#original_img").attr("src", "./uploads/" + data + ".jpg");
 								$("#fire_img").attr("src", "./uploads/fire_" + data + ".jpg");
+								$("#smoke_img").attr("src", "./uploads/smoke_" + data + ".jpg");
 
 							},
 							processData: false,

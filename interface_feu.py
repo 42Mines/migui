@@ -31,43 +31,5 @@ def confirm_fire(img, x1, y1, x2, y2):
     """
 
     img = cv2.medianBlur(img, 5)[y1:y2, x1:x2]
-    probas2 = restore_fire.compute(img, False)
+    probas2 = restore_fire.compute(img)
     return probas2
-
-
-def proba_fire(img):
-    """
-    Prend en paramètre une image et renvoie un couple(boundingbox, probabilite qu'il y ait un feu sur l'image)
-    après verification par les 2 algos
-
-    """
-    res = first_fire_pass(img)
-    proba1 = res[1]
-    x1,y1,x2,y2 = res[0]
-    proba2 = confirm_fire(img, x1, y1,x2,y2)
-    if proba2==0:
-        proba2 = EPSILON #pour eviter d'avoir 0
-    proba = (proba1**PRIORITE_COME*proba2**PRIORITE_CNN)**(PRIORITE_COME*PRIORITE_CNN)
-    plt.rcdefaults()
-    fig, ax = plt.subplots()
-    ax3= plt.subplot2grid((3, 3), (1, 0))
-    ax2 = plt.subplot2grid((3, 3), (1, 1), colspan=2)
-    people = ('Feu', 'Rien')
-    y_pos = np.arange(2)
-    performance = [proba, 1-proba]      
-    ax2.barh(y_pos, performance, align='center',
-            color='red', ecolor='black')
-    ax2.set_yticks(y_pos)
-    ax2.set_yticklabels(people)
-    ax2.invert_yaxis()  # labels read top-to-bottom
-    ax2.set_xlabel('Performance')
-    ax2.set_title('Resultat du reseau de neurones')
-    ax3.set_title('Image')
-    ax3.imshow(img[:,:,::-1])
-    plt.show()
-
-    return (x1,y1,x2,y2,proba)
-
-#Exemple d'utilisation
-#proba_fire(cv2.imread("./test/1 (7).jpg"))
-
