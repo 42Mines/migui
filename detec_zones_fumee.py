@@ -13,6 +13,14 @@ def selectZones(filename, number_zones):
     """
 
     src = cv2.imread(filename, cv2.IMREAD_COLOR)[:, :, ::-1]
+    lg = src.shape[0]
+    Lg = src.shape[1]
+    
+    miniL = min(src.shape[0], src.shape[1])
+    src = cv2.medianBlur(src, 5)
+    src = cv2.resize(src,(min(miniL,200),min(miniL,200)))
+    deltalg = lg/img.shape[0]
+    deltaLG = Lg/img.shape[1]
     t = time.time()
     def findPossibleSmoke(src):
 
@@ -76,7 +84,7 @@ def selectZones(filename, number_zones):
                         compactCC.append([curCC, total, nXMin, nYMin, nXMax, nYMax])
                     curCC += 1
         compactCC.sort(key=lambda l:l[1], reverse=True)
-        return compactCC, visited
+    *    return compactCC, visited
     """
     fig = plt.figure()
     ax1 = fig.add_subplot(221)
@@ -118,7 +126,7 @@ def selectZones(filename, number_zones):
 
     u = (time.time() - t)
     """
-    return answer
+    return answer,deltalg,deltaLG
 
 #selectZones("C:/Users/Victor/Desktop/Mines_ParisTech/MIG/img/fumee_bdd/1420085.jpg",4)
 #selectZones("C:/Users/Victor/Desktop/Mines_ParisTech/MIG/img/fumee_bdd/1450134.jpg",4)
