@@ -42,7 +42,7 @@ for file in listdir(folder):
         
         for i in range(len(zones_fumee_potentielle)):
             y1, x1, y2, x2 = zones_fumee_potentielle[i]
-            #cv2.rectangle(img, (int(x1*deltalg), int(y1*deltaLG)), (int(x2*deltalg), int(y2*deltaLG)), (255, 0, 0), 3)
+            cv2.rectangle(img, (int(x1*deltaLG), int(y1*deltalg)), (int(x2*deltaLG), int(y2*deltalg)), (255, 0, 0), 3)
         
         x1,y1,x2,y2,proba = interface_fumee.proba_fumee(folder+file)
         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 3)
