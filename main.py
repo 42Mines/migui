@@ -41,7 +41,7 @@ for file in listdir(folder):
         metadata = open(folder + "metadata_smoke_" + file.replace(".jpeg", "").replace(".jpg", "") + ".txt", "w")
         
         for i in range(len(zones_fumee_potentielle)):
-            y1, x1, y2, x2 = zones_fumee_potentielle[i]
+            x1, y1, x2, y2 = zones_fumee_potentielle[i]
             cv2.rectangle(img, (int(x1*deltaLG), int(y1*deltalg)), (int(x2*deltaLG), int(y2*deltalg)), (255, 0, 0), 3)
         
         x1,y1,x2,y2,proba = interface_fumee.proba_fumee(folder+file)

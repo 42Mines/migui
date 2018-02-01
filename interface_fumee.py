@@ -27,14 +27,13 @@ def confirm_smoke(img, x1, y1, x2, y2):
        :return: double la probabilite qu'on ait bien du feu
     """
 
-    img = img[y1:y2,x1:x2,:]
+    img = img[x1:x2,y1:y2,:]
     probas2 = restore_smoke.compute(img)
     return probas2
 
 
 def proba_fumee(fn):
 
-    print("function loaded")
     """
     Prend en paramètre une image et renvoie un couple(boundingbox, probabilite qu'il y ait de la fumée sur l'image)
     après verification par les 2 algos
@@ -48,7 +47,7 @@ def proba_fumee(fn):
     Lg = img.shape[1]
     miniL = min(lg,Lg)
     img = cv2.medianBlur(img, 5)
-    img = cv2.resize(img,(min(miniL,200),min(miniL,200)))
+    img = cv2.resize(img,(min(miniL,300),min(miniL,300)))
 
     """
     Fonction auxiliaire pour redécouper une zone trop grande fournie en entrée au réseau de neurones
@@ -90,7 +89,6 @@ def proba_fumee(fn):
     xMin,yMin, xMax, yMax = 0,0,0,0
     max_proba = 0
 
-    print("alive")
     for elem in res:
         proba_tmp = confirm_smoke(img, elem[0],elem[1], elem[2],elem[3])
         if proba_tmp == max_proba and proba_tmp != 0:
@@ -107,7 +105,7 @@ def proba_fumee(fn):
     
 
     ### Affichage du résultat
-    return (int(xMin*deltalg),int(  yMin*deltaLG),int(xMax*deltalg),int(yMax*deltaLG),max_proba)
+    return (int(yMin*deltaLG),int(xMin*deltalg),int(yMax*deltaLG),int(xMax*deltalg),max_proba)
 
 
     

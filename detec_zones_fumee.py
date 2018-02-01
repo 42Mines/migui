@@ -18,7 +18,7 @@ def selectZones(filename, number_zones):
     
     miniL = min(src.shape[0], src.shape[1])
     src = cv2.medianBlur(src, 5)
-    src = cv2.resize(src,(min(miniL,200),min(miniL,200)))
+    src = cv2.resize(src,(min(miniL,300),min(miniL,300)))
     deltalg = lg/src.shape[0]
     deltaLG = Lg/src.shape[1]
     t = time.time()
@@ -109,7 +109,7 @@ def selectZones(filename, number_zones):
         nXMin = compactCC[i][2]
         nYMax = compactCC[i][5]
         nYMin = compactCC[i][3]
-        answer.append((nXMin, nYMin, nXMax,nYMax))
+        answer.append((nYMin, nXMin, nYMax,nXMax))
         #imgs.append(src[nXMin:nXMax, nYMin:nYMax, :])
     """
     keptCC = compactCC[0:min(len(compactCC), number_zones)]
