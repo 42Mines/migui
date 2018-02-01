@@ -12,17 +12,17 @@ def selectZones(filename, number_zones):
 
 	"""
 
-	src = cv2.imread(filename, cv2.IMREAD_COLOR)[:, :, ::-1]
-	lg = src.shape[0]
-	Lg = src.shape[1]
-	
-	miniL = min(src.shape[0], src.shape[1])
-	src = cv2.medianBlur(src, 5)
-	src = cv2.resize(src,(min(miniL,200),min(miniL,200)))
-	deltalg = lg/img.shape[0]
-	deltaLG = Lg/img.shape[1]
-	t = time.time()
-	def findPossibleSmoke(src):
+    src = cv2.imread(filename, cv2.IMREAD_COLOR)[:, :, ::-1]
+    lg = src.shape[0]
+    Lg = src.shape[1]
+    
+    miniL = min(src.shape[0], src.shape[1])
+    src = cv2.medianBlur(src, 5)
+    src = cv2.resize(src,(min(miniL,200),min(miniL,200)))
+    deltalg = lg/src.shape[0]
+    deltaLG = Lg/src.shape[1]
+    t = time.time()
+    def findPossibleSmoke(src):
 
 		smoke_pixels = np.zeros((src.shape[0], src.shape[1]))
 		R = src[:, :, 0]
