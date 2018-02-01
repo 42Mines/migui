@@ -19,8 +19,8 @@ def selectZones(filename, number_zones):
     miniL = min(src.shape[0], src.shape[1])
     src = cv2.medianBlur(src, 5)
     src = cv2.resize(src,(min(miniL,200),min(miniL,200)))
-    deltalg = lg/img.shape[0]
-    deltaLG = Lg/img.shape[1]
+    deltalg = lg/src.shape[0]
+    deltaLG = Lg/src.shape[1]
     t = time.time()
     def findPossibleSmoke(src):
 
