@@ -3,6 +3,7 @@ import detec_zones_fumee
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
 
 def first_smoke_pass(img, max_zones_detected = 4):
     """
@@ -26,46 +27,57 @@ def confirm_smoke(img, x1, y1, x2, y2):
        :return: double la probabilite qu'on ait bien du feu
     """
 
-    img = cv2.medianBlur(img, 5)[y1:y2, x1:x2]
+    img = img[y1:y2,x1:x2,:]
     probas2 = restore_smoke.compute(img)
     return probas2
 
 
 def proba_fumee(fn):
+
+    print("function loaded")
     """
     Prend en paramètre une image et renvoie un couple(boundingbox, probabilite qu'il y ait de la fumée sur l'image)
     après verification par les 2 algos
 
     """
     img = cv2.imread(fn)
+
     INPUT_AREA  = 64*64
     MAX_INPUT_AREA = 4 * INPUT_AREA
+    lg = img.shape[0]
+    Lg = img.shape[1]
+    miniL = min(lg,Lg)
+    img = cv2.medianBlur(img, 5)
+    img = cv2.resize(img,(min(miniL,200),min(miniL,200)))
 
     """
     Fonction auxiliaire pour redécouper une zone trop grande fournie en entrée au réseau de neurones
     """
-
     def decoupe(x1,y1,x2,y2):
-        decoupe_x = (x2-x1)//64
-        decoupe_y = (y2-y1)//64
+        decoupe_x = (x2-x1)//65
+        decoupe_y = (y2-y1)//65
         tmp = []
         for i in range(0,decoupe_x):
             for j in range(0,decoupe_y):
                 if i==decoupe_x-1:
                     xM = x2
+                    xm = x2-65
                 else:
-                    xM = x1+(i+1)*64
+                    xM = x1+(i+1)*65
+                    xm = x1+i*65
                 if i==decoupe_y-1:
                     yM = y2
+                    ym = y2-65
                 else:
-                    yM = y1+(j+1)*64
-                tmp.append((x1+i*64,y1+j*64,xM,yM))
+                    yM = y1+(j+1)*65
+                    ym=y1+j*65
+                tmp.append((xm,ym,xM,yM))
         return tmp
-
-    res = first_smoke_pass(fn)
-
-   
+    res,deltalg,deltaLG = first_smoke_pass(fn)   
+     
     ### Adaptation des zones fournies en entrée
+
+
     for i in range(0,len(res)):
         x1, y1,x2,y2 = res[i]
         area = abs((y2-y1)*(x2-x1))
@@ -78,6 +90,7 @@ def proba_fumee(fn):
     xMin,yMin, xMax, yMax = 0,0,0,0
     max_proba = 0
 
+    print("alive")
     for elem in res:
         proba_tmp = confirm_smoke(img, elem[0],elem[1], elem[2],elem[3])
         if proba_tmp == max_proba and proba_tmp != 0:
@@ -91,9 +104,10 @@ def proba_fumee(fn):
             yMin = elem[1]
             xMax = elem[2]
             yMax = elem[3]
+    
 
     ### Affichage du résultat
-    return (xMin,yMin,xMax,yMax,max_proba)
+    return (int(xMin*deltalg),int(yMin*deltaLG),int(xMax*deltalg),int(yMax*deltaLG),max_proba)
 
 
     

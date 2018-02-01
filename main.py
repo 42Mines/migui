@@ -36,21 +36,17 @@ for file in listdir(folder):
         tf.reset_default_graph()
 
         # fumée
-        zones_fumee_potentielle = interface_fumee.first_smoke_pass(folder + file)
+        zones_fumee_potentielle,deltalg,deltaLG = interface_fumee.first_smoke_pass(folder + file)
         img = cv2.imread(folder + file)
         metadata = open(folder + "metadata_smoke_" + file.replace(".jpeg", "").replace(".jpg", "") + ".txt", "w")
-
+        
         for i in range(len(zones_fumee_potentielle)):
             y1, x1, y2, x2 = zones_fumee_potentielle[i]
-            proba = interface_fumee.confirm_smoke(cv2.imread(folder + file), x1, y1, x2, y2)
-
-            if proba > 0.5:
-                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 3)
-            else:
-                cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 3)
-
-            metadata.write(str(proba) + "\n")
-
+            #cv2.rectangle(img, (int(x1*deltalg), int(y1*deltaLG)), (int(x2*deltalg), int(y2*deltaLG)), (255, 0, 0), 3)
+        
+        x1,y1,x2,y2,proba = interface_fumee.proba_fumee(folder+file)
+        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 3)
+        metadata.write(str(proba)+"\n")
         cv2.imwrite(folder + "smoke_" + file, img)
         metadata.close()
 
