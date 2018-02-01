@@ -79,7 +79,7 @@ def proba_fumee(fn):
 
     for i in range(0,len(res)):
         x1, y1,x2,y2 = res[i]
-        area = abs((y2-y1)*(x2-x1))
+        area = (y2-y1)*(x2-x1)
         if area > MAX_INPUT_AREA:
             tmp = decoupe(x1, y1, x2, y2)
             del res[i]
@@ -105,7 +105,7 @@ def proba_fumee(fn):
     
 
     ### Affichage du résultat
-    return (int(yMin*deltaLG),int(xMin*deltalg),int(yMax*deltaLG),int(xMax*deltalg),max_proba)
+    return (int(xMin*deltaLG),int(yMin*deltalg),int(xMax*deltaLG),int(yMax*deltalg),max_proba)
 
 
     
