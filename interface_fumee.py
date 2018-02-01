@@ -107,7 +107,7 @@ def proba_fumee(fn):
     
 
     ### Affichage du résultat
-    return (int(xMin*deltalg),int(yMin*deltaLG),int(xMax*deltalg),int(yMax*deltaLG),max_proba)
+    return (int(xMin*deltaLG),int(yMin*deltalg),int(xMax*deltaLG),int(yMax*deltalg),max_proba)
 
 
     
